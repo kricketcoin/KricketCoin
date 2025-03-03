@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>KricketCoin - The Community-Driven Cricket Meme Coin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    /* RESET & BASE */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      padding-top: 80px; /* offset for fixed nav */
+      background: #0d0d0d url('https://media.istockphoto.com/id/936417012/vector/cricket-stadium-vector-background.jpg?s=612x612&w=0&k=20&c=ktPUWBDjsTAYT0cjroYMkgJG3AQPLPuSOO1Vd8Urgyg=') no-repeat center center fixed;
+      background-size: cover;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    p, h1, h2, h3, h4, h5, h6 {
+      margin: 0;
+    }
+
+    /* FALLING CRICKET BALLS */
+    .falling-balls {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 100%; 
+      height: 100%;
+      pointer-events: none; 
+      overflow: hidden;
+      z-index: 1;
+    }
+    .ball {
+      position: absolute;
+      width: 50px; 
+      height: 50px;
+      background-size: cover; 
+      background-position: center;
+      background-image: url('https://via.placeholder.com/50?text=Ball');
+      opacity: 0.4;
+      animation: fallBalls 15s linear infinite;
+      will-change: transform;
+    }
+    @keyframes fallBalls {
+      0%   { transform: translateY(-150px)   rotate(0deg); }
+      50%  { transform: translateY(50vh)     rotate(180deg); }
+      100% { transform: translateY(120vh)    rotate(360deg); }
+    }
+    .ball:nth-child(1) { left: 10%; width: 40px; height: 40px; animation-delay: 0s; }
+    .ball:nth-child(2) { left: 30%; width: 60px; height: 60px; animation-delay: 4s; }
+    .ball:nth-child(3) { left: 50%; width: 45px; height: 45px; animation-delay: 2s; }
+    .ball:nth-child(4) { left: 70%; width: 50px; height: 50px; animation-delay: 6s; }
+    .ball:nth-child(5) { left: 90%; width: 55px; height: 55px; animation-delay: 10s; }
+
+    /* FIXED NAV */
+    nav {
+      position: fixed; 
+      top: 0; 
+      left: 0;
+      width: 100%;
+      background: rgba(0,0,0,0.8);
+      padding: 15px 20px;
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between;
+      z-index: 999;
+    }
+    nav .left-nav {
+      display: flex; 
+      align-items: center; 
+      gap: 15px;
+    }
+    nav img.logo {
+      height: 40px;
+    }
+    nav a {
+      color: #fff; 
+      font-weight: 600; 
+      text-transform: uppercase; 
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #ffcb05;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      text-align: center;
+      margin-top: 0;
+      padding: 100px 20px 60px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      position: relative;
+      z-index: 2; /* above falling balls */
+    }
+    .hero h1 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 4rem; 
+      margin-bottom: 20px;
+      color: #ffcb05;
+    }
+    .hero p {
+      max-width: 700px; 
+      margin: 0 auto 20px auto; 
+      font-size: 1.2rem; 
+      line-height: 1.5;
+    }
+    .contract-address {
+      font-size: 0.95rem; 
+      font-weight: 600; 
+      margin-bottom: 30px;
+      color: #ffcb05;
+    }
+    .cta-button {
+      display: inline-block; 
+      background-color: #ffcb05; 
+      color: #0d0d0d;
+      padding: 15px 30px; 
+      border-radius: 30px; 
+      font-weight: 600; 
+      text-transform: uppercase;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .cta-button:hover {
+      transform: scale(1.05); 
+      opacity: 0.9;
+    }
+
+    /* SECTION WRAPPERS (semi-translucent background) */
+    section {
+      background: rgba(0,0,0,0.6);
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: 40px auto; /* spacing */
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    }
+    section h2 {
+      font-family: 'Russo One', sans-serif;
+      font-size: 2.5rem; 
+      margin-bottom: 30px;
+      color: #ffcb05; 
+      text-align: center; 
+      text-transform: uppercase;
+    }
+    section .description {
+      font-size: 1.1rem; 
+      line-height: 1.8; 
+      max-width: 800px;
+      margin: 0 auto 20px; 
+      text-align: center;
+      color: #fff;
+    }
+
+    /* TOKENOMICS */
+    #tokenomics .tokenomics-table {
+      width: 100%; margin: 30px auto; border-collapse: collapse; max-width: 700px;
+    }
+    #tokenomics .tokenomics-table th, 
+    #tokenomics .tokenomics-table td {
+      border: 1px solid #444; padding: 15px; text-align: center;
+    }
+    #tokenomics .tokenomics-table th {
+      background: #222; font-weight: 600; color: #ffcb05;
+    }
+    #tokenomics .tokenomics-table tr:nth-child(even) {
+      background: #1c1c1c;
+    }
+
+    /* COMMUNITY-DRIVEN GOVERNANCE - TIMELINE-STYLE WOODEN BOXES (No images) */
+    #governance {
+      position: relative;
+    }
+    #governance .governance-container {
+      position: relative; padding: 20px 0; /* space for timeline */
+    }
+    #governance .governance-container::before {
+      /* center line */
+      content: '';
+      position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 2px; background: #c19a6b; /* 'wooden' color line */
+    }
+    .gov-item {
+      position: relative; width: 50%; padding: 20px 30px; box-sizing: border-box;
+    }
+    .gov-item.left { left: 0; text-align: right; }
+    .gov-item.right { left: 50%; text-align: left; }
+    .gov-box {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/f/fc/Wood_texture_bg.jpg') no-repeat center center/cover;
+      border: 3px solid #5a3f2b;
+      border-radius: 10px;
+      color: #fff;
+      padding: 20px;
+      position: relative;
+    }
+    .gov-item.left::after, .gov-item.right::after {
+      content: '';
+      position: absolute; top: 20px; width: 24px; height: 24px;
+      background: #c19a6b; /* 'wooden' color */
+      border: 2px solid #5a3f2b;
+      border-radius: 50%;
+    }
+    .gov-item.left::after { right: -16px; }
+    .gov-item.right::after { left: -16px; }
+
+    .gov-box h4 {
+      margin-top: 0; margin-bottom: 10px; color: #ffcb05; font-size: 1.3rem;
+    }
+    .gov-box p {
+      line-height: 1.5; margin-bottom: 0;
+    }
+
+    /* ROADMAP */
+    .roadmap-container { position: relative; padding: 20px 0; }
+    .roadmap-container::before {
+      content: ''; position: absolute; left: 50%; top: 0; bottom: 0;
+      width: 2px; background: #ffcb05;
+    }
+    .roadmap-item {
+      position: relative; width: 50%; padding: 20px 40px; box-sizing: border-box;
+    }
+    .roadmap-item.left { left: 0; text-align: right; }
+    .roadmap-item.right { left: 50%; text-align: left; }
+    .roadmap-item .roadmap-content {
+      background: #1c1c1c; padding: 20px; border-radius: 10px; position: relative;
+    }
+    .roadmap-item.left::after {
+      content: ''; position: absolute; top: 20px; right: -10px;
+      width: 20px; height: 20px; background: #ffcb05; border-radius: 50%;
+    }
+    .roadmap-item.right::after {
+      content: ''; position: absolute; top: 20px; left: -10px;
+      width: 20px; height: 20px; background: #ffcb05; border-radius: 50%;
+    }
+    .roadmap-content ul {
+      list-style-type: disc; margin-left: 20px; margin-top: 10px;
+    }
+    .roadmap-content li {
+      font-weight: bold; margin-bottom: 8px; color: #ffcb05;
+    }
+
+    /* SOCIAL CONTENT */
+    .social-content {
+      display: flex; justify-content: center; align-items: center; gap: 30px;
+      margin-top: 20px;
+    }
+    .social-content a img {
+      width: 50px; filter: invert(1); transition: transform 0.3s;
+    }
+    .social-content a img:hover {
+      transform: scale(1.2);
+    }
+
+    /* FOOTER */
+    footer {
+      background: rgba(0,0,0,0.8);
+      text-align: center; margin-top: 40px; padding: 30px 20px;
+      border-top: 1px solid #333;
+    }
+    footer .footer-top {
+      margin-bottom: 10px;
+    }
+    footer .footer-top img.logo {
+      height: 40px; vertical-align: middle; margin-right: 10px;
+    }
+    footer p {
+      font-size: 0.9rem; color: #999; margin: 0;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.5rem; }
+      .hero p { font-size: 1rem; }
+      nav .left-nav {
+        display: block;
+      }
+      .roadmap-item, .gov-item {
+        width: 100%; padding: 20px; text-align: center;
+      }
+      .roadmap-item.left, .gov-item.left, .gov-item.right, .roadmap-item.right {
+        left: 0; text-align: center;
+      }
+      .roadmap-container::before, .governance-container::before {
+        left: 50%;
+      }
+      .gov-item.left::after, .gov-item.right::after {
+        left: 50%; right: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Falling Cricket Balls -->
+  <div class="falling-balls">
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+    <div class="ball"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="left-nav">
+      <a href="#home">
+        <!-- Updated to RAW GitHub image URL so it actually renders -->
+        <img class="logo" src="https://raw.githubusercontent.com/CrickCoin/KricketCoin/main/KricketCoin.png">
+      </a>
+      <a href="#about">About Us</a>
+      <a href="#tokenomics">Tokenomics</a>
+      <a href="#governance">Governance</a>
+      <a href="#roadmap">Roadmap</a>
+      <!-- Whitepaper: using `download` to prompt user to save the PDF -->
+      <a 
+        href="https://github.com/CrickCoin/KricketCoin/blob/main/KricketCoin-WhitePaper.pdf"
+        download="KricketCoin-Whitepaper.pdf">
+        Whitepaper
+      </a>
+      <a href="https://pancakeswap.finance/" target="_blank">Buy on PancakeSwap</a>
+      <a href="#social">Social Media</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero" id="home">
+    <h1>KricketCoin (KRKT)</h1>
+    <p>
+      A community-driven, cricket-inspired meme coin!<br>
+      Total Supply: <strong>2 Billion</strong> tokens.
+    </p>
+    <!-- Contract Address here -->
+    <p class="contract-address">
+      Contract Address: 0x66F6d83FBac7Cb2a09dA306617BB2F82474A45cD
+    </p>
+    <a href="#about" class="cta-button">Discover More</a>
+  </header>
+
+  <!-- About Us -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p class="description">
+      KricketCoin is built by passionate cricket fans for a passionate community. We champion a transparent, governance‑driven approach where every fan’s voice helps shape the future.
+    </p>
+    <p class="description">
+      Join us as we revolutionize cricket culture through collective decisions, engaging community events, and a strong commitment to fairness and innovation.
+    </p>
+  </section>
+
+  <!-- Tokenomics (Always Visible) -->
+  <section id="tokenomics">
+    <h2>Tokenomics</h2>
+    <p class="description">
+      KricketCoin’s distribution is crafted to foster community growth and ensure transparent governance.
+      <br><br>
+      <strong>100M</strong> tokens for Airdrop, <strong>500M</strong> for Transfer Liquidity (one-time call by owner),
+      <strong>1200M</strong> for Governance Treasury (locked in UniCrypt), and
+      <strong>200M</strong> for Development (1-year vesting).
+    </p>
+    <table class="tokenomics-table">
+      <thead>
+        <tr>
+          <th>Allocation</th>
+          <th>Amount (Millions)</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Total Supply</td>
+          <td>2000</td>
+          <td>2 Billion Tokens</td>
+        </tr>
+        <tr>
+          <td>Airdrop</td>
+          <td>100</td>
+          <td>Community Giveaways</td>
+        </tr>
+        <tr>
+          <td>Liquidity</td>
+          <td>500</td>
+          <td>One-time call by Owner</td>
+        </tr>
+        <tr>
+          <td>Governance Treasury</td>
+          <td>1200</td>
+          <td>
+            Locked in UniCrypt<br>
+            <a style="color:#ffcb05"
+               href="https://app.uncx.network/lockers/token/chain/56/address/0x66f6d83fbac7cb2a09da306617bb2f82474a45cd"
+               target="_blank">View Lock</a>
+          </td>
+        </tr>
+        <tr>
+          <td>Development</td>
+          <td>200</td>
+          <td>
+            1-year vesting for the developer<br>
+            <a style="color:#ffcb05"
+               href="https://app.uncx.network/lockers/token/chain/56/address/0x66f6d83fbac7cb2a09da306617bb2f82474a45cd"
+               target="_blank">View Vesting</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <ul style="list-style-type: disc; margin: 20px auto 0; max-width: 800px; color: #fff; font-size: 1rem;">
+      <li>Our <strong>200M Development tokens</strong> are secured with a 1-year vesting schedule, ensuring the team’s long-term commitment.</li>
+      <li><strong>Contract is viewable on UniCrypt for full transparency</strong>, so every token holder can verify the locked status.</li>
+    </ul>
+  </section>
+
+  <!-- Governance -->
+  <section id="governance">
+    <h2>Community-Driven Governance</h2>
+    <p class="description">
+      KricketCoin is governed by fans, for fans. Through decentralized voting, locked treasury, and open collaboration, we ensure every voice counts.
+    </p>
+    <div class="governance-container">
+      <div class="gov-item left">
+        <div class="gov-box">
+          <h4>Voting</h4>
+          <p>
+            All major decisions are decided by the community – no single point of control. 
+            Every holder has a voice and vote in shaping KricketCoin’s future.
+          </p>
+        </div>
+      </div>
+      <div class="gov-item right">
+        <div class="gov-box">
+          <h4>Treasury</h4>
+          <p>
+            1200M tokens locked in UniCrypt, released only by majority consensus. 
+            Funds can be allocated to marketing, partnerships, or community rewards based on open proposals.
+          </p>
+        </div>
+      </div>
+      <div class="gov-item left">
+        <div class="gov-box">
+          <h4>Decentralization</h4>
+          <p>
+            No central authority. Cricket lovers worldwide collectively control KricketCoin’s direction, 
+            ensuring a fair and inclusive environment.
+          </p>
+        </div>
+      </div>
+      <div class="gov-item right">
+        <div class="gov-box">
+          <h4>Community Initiatives</h4>
+          <p>
+            Fans propose new ideas, events, and projects—such as sponsoring local cricket tournaments. 
+            The best initiatives are approved through transparent community polls.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section id="roadmap">
+    <h2>Roadmap</h2>
+    <div class="roadmap-container">
+      <div class="roadmap-item left">
+        <div class="roadmap-content">
+          <h3>Phase 1</h3>
+          <ul>
+            <li><b>Launch & Airdrop:</b> Distribute 100M tokens to early supporters</li>
+            <li><b>Liquidity Provision:</b> Execute a one-time 500M token transfer</li>
+            <li><b>Community Kickoff:</b> Grassroots campaigns & social media buzz</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roadmap-item right">
+        <div class="roadmap-content">
+          <h3>Phase 2</h3>
+          <ul>
+            <li><b>Exchange Listings:</b> Secure placements on top DEXs</li>
+            <li><b>Strategic Partnerships:</b> Collaborate with cricket communities & influencers</li>
+            <li><b>Viral Marketing:</b> Expand global reach with memes & promotions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roadmap-item left">
+        <div class="roadmap-content">
+          <h3>Phase 3</h3>
+          <ul>
+            <li><b>Community Events:</b> Organize contests & fan engagement initiatives</li>
+            <li><b>Governance Activation:</b> Official voting portal for proposals</li>
+            <li><b>Ecosystem Growth:</b> Integrate new DeFi features & sponsor cricket-related projects</li>
+          </ul>
+        </div>
+      </div>
+      <div class="roadmap-item right">
+        <div class="roadmap-content">
+          <h3>Phase 4</h3>
+          <ul>
+            <li><b>DAO Implementation:</b> Decentralized governance framework</li>
+            <li><b>Global Outreach:</b> Expand presence across cricket-playing nations</li>
+            <li><b>Sustainable Innovation:</b> Drive long-term growth & advanced utility</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Media -->
+  <section id="social">
+    <h2>Social Media</h2>
+    <p class="description">Connect with us on our official channels to stay updated and engage with fellow cricket fans!</p>
+    <div class="social-content">
+      <a href="https://x.com/CrickCoin/" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Twitter-logo.svg" alt="X (Twitter)">
+      </a>
+      <a href="https://t.me/CrickCoin" target="_blank">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-top">
+      <!-- Updated to RAW GitHub image URL so it actually renders -->
+      <img class="logo" src="https://raw.githubusercontent.com/CrickCoin/KricketCoin/main/KricketCoin.png">
+    </div>
+    <p>
+      &copy; <span id="year"></span> KricketCoin. All rights reserved.<br>
+      Meme coins carry risk – Please DYOR!
+    </p>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Footer Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
